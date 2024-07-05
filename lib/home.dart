@@ -27,7 +27,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int _total = 0;
+    num _total = 0;
 
     for (var i = 0; i < data.length; i++) {
       _total += data[i]['total_price'];
@@ -68,9 +68,7 @@ class Home extends StatelessWidget {
                 ),
                 SizedBox(width: 20),
                 Expanded(
-                  child: FlatButton(
-                    color: Theme.of(context).primaryColor,
-                    textColor: Colors.white,
+                  child: ElevatedButton(
                     child: Text('Print'),
                     onPressed: () {
                       Navigator.push(context,

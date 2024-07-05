@@ -18,7 +18,7 @@ class _PrintState extends State<Print> {
 
   PrinterBluetoothManager _printerManager = PrinterBluetoothManager();
   List<PrinterBluetooth> _devices = [];
-  String _devicesMsg;
+  String? _devicesMsg;
   BluetoothManager bluetoothManager = BluetoothManager.instance;
 
   @override
@@ -55,8 +55,8 @@ class _PrintState extends State<Print> {
               itemBuilder: (c, i) {
                 return ListTile(
                   leading: Icon(Icons.print),
-                  title: Text(_devices[i].name),
-                  subtitle: Text(_devices[i].address),
+                  title: Text(_devices[i].name ?? ''),
+                  subtitle: Text(_devices[i].address  ?? ''),
                   onTap: () {
                     _startPrint(_devices[i]);
                   },
@@ -77,52 +77,52 @@ class _PrintState extends State<Print> {
 
   Future<void> _startPrint(PrinterBluetooth printer) async {
     _printerManager.selectPrinter(printer);
-    final result = await _printerManager.printTicket(await _ticket(PaperSize.mm80));
+    // final result = await _printerManager.printTicket(await _ticket(PaperSize.mm80));
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        content: Text(result.msg),
+        content: Text('result.msg'),
       ),
     );
   }
 
-  Future<Ticket> _ticket(PaperSize paper) async {
-    final ticket = Ticket(paper);
-    int total = 0;
+  // Future<Ticket> _ticket(PaperSize paper) async {
+  //   final ticket = Ticket(paper);
+  //   num total = 0;
 
-    // Image assets
-    final ByteData data = await rootBundle.load('assets/store.png');
-    final Uint8List bytes = data.buffer.asUint8List();
-    final Image image = decodeImage(bytes);
-    ticket.image(image);
-    ticket.text(
-      'TOKO KU',
-      styles: PosStyles(align: PosAlign.center,height: PosTextSize.size2,width: PosTextSize.size2),
-      linesAfter: 1,
-    );
+  //   // Image assets
+  //   final ByteData data = await rootBundle.load('assets/store.png');
+  //   final Uint8List bytes = data.buffer.asUint8List();
+  //   final Image? image = decodeImage(bytes);
+  //   ticket.image(image);
+  //   ticket.text(
+  //     'TOKO KU',
+  //     styles: PosStyles(align: PosAlign.center,height: PosTextSize.size2,width: PosTextSize.size2),
+  //     linesAfter: 1,
+  //   );
 
-    for (var i = 0; i < widget.data.length; i++) {
-      total += widget.data[i]['total_price'];
-      ticket.text(widget.data[i]['title']);
-      ticket.row([
-        PosColumn(
-            text: '${widget.data[i]['price']} x ${widget.data[i]['qty']}',
-            width: 6),
-        PosColumn(text: 'Rp ${widget.data[i]['total_price']}', width: 6),
-      ]);
-    }
+  //   for (var i = 0; i < widget.data.length; i++) {
+  //     total += widget.data[i]['total_price'];
+  //     ticket.text(widget.data[i]['title']);
+  //     ticket.row([
+  //       PosColumn(
+  //           text: '${widget.data[i]['price']} x ${widget.data[i]['qty']}',
+  //           width: 6),
+  //       PosColumn(text: 'Rp ${widget.data[i]['total_price']}', width: 6),
+  //     ]);
+  //   }
     
-    ticket.feed(1);
-    ticket.row([
-      PosColumn(text: 'Total', width: 6, styles: PosStyles(bold: true)),
-      PosColumn(text: 'Rp $total', width: 6, styles: PosStyles(bold: true)),
-    ]);
-    ticket.feed(2);
-    ticket.text('Thank You',styles: PosStyles(align: PosAlign.center, bold: true));
-    ticket.cut();
+  //   ticket.feed(1);
+  //   ticket.row([
+  //     PosColumn(text: 'Total', width: 6, styles: PosStyles(bold: true)),
+  //     PosColumn(text: 'Rp $total', width: 6, styles: PosStyles(bold: true)),
+  //   ]);
+  //   ticket.feed(2);
+  //   ticket.text('Thank You',styles: PosStyles(align: PosAlign.center, bold: true));
+  //   ticket.cut();
 
-    return ticket;
-  }
+  //   return ticket;
+  // }
 
   @override
   void dispose() {
